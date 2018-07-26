@@ -20,7 +20,7 @@ Puppet::Type.newtype(:ini_setting) do
     end
   end
 
-  newparam(:name, namevar: true) do
+  newparam(:name, :namevar => true) do
     desc 'An arbitrary name used as the identity of the resource.'
   end
 
@@ -40,7 +40,7 @@ Puppet::Type.newtype(:ini_setting) do
     end
   end
 
-  newparam(:force_new_section_creation, boolean: true, parent: Puppet::Parameter::Boolean) do
+  newparam(:force_new_section_creation, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc 'Create setting only if the section exists'
     defaultto(true)
   end
@@ -126,7 +126,7 @@ Puppet::Type.newtype(:ini_setting) do
          'Defaults to undef (autodetect).'
   end
 
-  newparam(:refreshonly, boolean: true, parent: Puppet::Parameter::Boolean) do
+  newparam(:refreshonly, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc 'A flag indicating whether or not the ini_setting should be updated ' \
          'only when called as part of a refresh event'
     defaultto false

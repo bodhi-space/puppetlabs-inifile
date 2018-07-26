@@ -4,7 +4,7 @@ ini_setting = Puppet::Type.type(:ini_setting)
 
 describe ini_setting do
   describe 'path validation' do
-    subject { -> { described_class.new(name: 'foo', path: path) } }
+    subject { -> { described_class.new(name: 'foo', :path => path) } }
 
     context 'on posix platforms' do
       before(:each) do
@@ -70,7 +70,7 @@ describe ini_setting do
       before(:each) do
         Puppet[:show_diff] = cfg
       end
-      let(:value) { described_class.new(name: 'foo', value: 'whatever', show_diff: param).property(:value) }
+      let(:value) { described_class.new(:name => 'foo', :value => 'whatever', :show_diff => param).property(:value) }
 
       if cfg && [true, 'true'].include?(param)
         it 'displays diff' do

@@ -52,7 +52,7 @@ describe provider_class do
 
     it 'adds a value to the file' do
       provider_class.stubs(:file_path).returns(tmpfile)
-      resource = Puppet::Type::Inherit_ini_setting.new(setting: 'set_this', value: 'to_that')
+      resource = Puppet::Type::Inherit_ini_setting.new(:setting => 'set_this', :value => 'to_that')
       provider = described_class.new(resource)
       provider.create
       validate_file("set_this=to_that\n", tmpfile)

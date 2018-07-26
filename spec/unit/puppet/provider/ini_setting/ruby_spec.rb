@@ -93,13 +93,13 @@ describe provider_class do
         child_three.stubs(:file_path).returns(tmpfile)
         expect(child_three.instances.size).to eq(7)
         expected_array = [
-          { name: 'section1/foo', value: 'foovalue' },
-          { name: 'section1/bar', value: 'barvalue' },
-          { name: 'section1/master', value: 'true' },
-          { name: 'section2/foo', value: 'foovalue2' },
-          { name: 'section2/baz', value: 'bazvalue' },
-          { name: 'section2/url', value: 'http://192.168.1.1:8080' },
-          { name: 'section:sub/subby', value: 'bar' },
+          { name: 'section1/foo', :value => 'foovalue' },
+          { name: 'section1/bar', :value => 'barvalue' },
+          { name: 'section1/master', :value => 'true' },
+          { name: 'section2/foo', :value => 'foovalue2' },
+          { name: 'section2/baz', :value => 'bazvalue' },
+          { name: 'section2/url', :value => 'http://192.168.1.1:8080' },
+          { name: 'section:sub/subby', :value => 'bar' },
         ]
         real_array = []
         ensure_array = []
@@ -166,7 +166,7 @@ subby=bar
   shoes = purple
     EOS
     it 'adds a missing setting to the correct section' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'yahoo', value: 'yippee'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -196,7 +196,7 @@ subby=bar
   yahoo = yippee
     EOS
     it 'adds a missing setting to the correct section with pre/suffix' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'yahoo', value: 'yippee', section_prefix: '-', section_suffix: '-'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'nonstandard', :setting => 'yahoo', :value => 'yippee', :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -226,7 +226,7 @@ subby=bar
 		indented = weirdly
     EOS
     it 'adds a missing setting to the correct section with indent_char' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly', section_prefix: '-', section_suffix: '-', indent_char: "\t"))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'nonstandard', :setting => 'indented', :value => 'weirdly', :section_prefix => '-', :section_suffix => '-', :indent_char => "\t"))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -256,8 +256,8 @@ subby=bar
 				indented = weirdly
     EOS
     it 'adds a missing setting to the correct section indented by indent_char * indent_width' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly',
-                                                                   section_prefix: '-', section_suffix: '-', indent_char: "\t", indent_width: 4))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'nonstandard', :setting => 'indented', :value => 'weirdly',
+                                                                   :section_prefix => '-', :section_suffix => '-', :indent_char => "\t", :indent_width => 4))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -287,8 +287,8 @@ subby=bar
 				indented = weirdly
     EOS
     it 'treats a string indent_width as an integer' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'indented', value: 'weirdly',
-                                                                   section_prefix: '-', section_suffix: '-', indent_char: "\t", indent_width: '4'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'nonstandard', :setting => 'indented', :value => 'weirdly',
+                                                                   :section_prefix => '-', :section_suffix => '-', :indent_char => "\t", :indent_width => '4'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -318,7 +318,7 @@ subby=bar
 yahoo = yippee
     EOS
     it 'adds a missing setting to the correct section with colon' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'yahoo', value: 'yippee'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -347,7 +347,7 @@ subby=bar
   shoes = purple
     EOS
     it 'modifies an existing setting with a different value' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'baz', value: 'bazvalue2'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:setting => 'baz', :value => 'bazvalue2'))
       provider = described_class.new(resource)
       expect(provider).to be_exists
       provider.value = 'bazvalue2'
@@ -376,10 +376,10 @@ subby=bar
   shoes = purple
     EOS
     it 'modifies an existing setting with a different boolean value' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'master', value: false))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'master', value: false))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
-      transaction = instance_double('transaction', persistence: true)
+      transaction = instance_double('transaction', :persistence => true)
       expect(Puppet::Transaction::ResourceHarness.new(transaction).evaluate(provider.resource).out_of_sync).to eq(true)
       validate_file(expected_content_eight, tmpfile)
     end
@@ -407,7 +407,7 @@ subby=bar
   shoes = orange
     EOS
     it 'modifies an existing setting with pre/suffix with a different value' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', value: 'orange', section_prefix: '-', section_suffix: '-'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'nonstandard', :setting => 'shoes', :value => 'orange', :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.value = 'orange'
@@ -436,7 +436,7 @@ subby=foo
   shoes = purple
     EOS
     it 'modifies an existing setting with a different value - with colon in section' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'subby', value: 'foo'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section:sub', :setting => 'subby', :value => 'foo'))
       provider = described_class.new(resource)
       expect(provider.value).to eq('bar')
       provider.value = 'foo'
@@ -465,7 +465,7 @@ subby=bar
   shoes = purple
     EOS
     it 'is able to handle settings with non alphanumbering settings' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'url', value: 'http://192.168.0.1:8080'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:setting => 'url', :value => 'http://192.168.0.1:8080'))
       provider = described_class.new(resource)
       expect(provider.value).to eq('http://192.168.1.1:8080')
       provider.value = 'http://192.168.0.1:8080'
@@ -494,7 +494,7 @@ subby=bar
   shoes = http://192.168.0.1:8080
     EOS
     it 'is able to handle settings with pre/suffix with non alphanumbering settings' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', value: 'http://192.168.0.1:8080', section_prefix: '-', section_suffix: '-'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'nonstandard', :setting => 'shoes', :value => 'http://192.168.0.1:8080', :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
       expect(provider.value).to eq('purple')
       provider.value = 'http://192.168.0.1:8080'
@@ -502,14 +502,14 @@ subby=bar
     end
 
     it 'recognizes an existing setting with the specified value' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(setting: 'baz', value: 'bazvalue'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:setting => 'baz', :value => 'bazvalue'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
     end
 
     it 'recognizes an existing setting with pre/suffix with the specified value' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', value: 'purple',
-                                                                   section_prefix: '-', section_suffix: '-'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'nonstandard', :setting => 'shoes', :value => 'purple',
+                                                                   :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
     end
@@ -539,7 +539,7 @@ subby=bar
 huzzah = shazaam
     EOS
     it 'adds a new section if the section does not exist' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'huzzah', value: 'shazaam'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section3', :setting => 'huzzah', :value => 'shazaam'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -571,7 +571,7 @@ subby=bar
 huzzah = shazaam
     EOS
     it 'adds a new section with pre/suffix if the section does not exist' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'huzzah', value: 'shazaam', section_prefix: '-', section_suffix: '-'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section3', :setting => 'huzzah', :value => 'shazaam', :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
       expect(provider).not_to be_exists
       provider.create
@@ -603,7 +603,7 @@ subby=bar
 huzzah = shazaam
     EOS
     it 'adds a new section if the section does not exist - with colon' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'huzzah', value: 'shazaam'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section:subsection', :setting => 'huzzah', :value => 'shazaam'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -635,7 +635,7 @@ subby=bar
 huzzah = shazaam
     EOS
     it 'adds a new section with pre/suffix if the section does not exist - with colon' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'huzzah', value: 'shazaam', section_prefix: '-', section_suffix: '-'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section:subsection', :setting => 'huzzah', :value => 'shazaam', :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -647,7 +647,7 @@ huzzah = shazaam
 setting1 = hellowworld
 '
     it 'adds a new section if no sections exists' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'setting1', value: 'hellowworld', path: emptyfile))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'setting1', :value => 'hellowworld', :path => emptyfile))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -659,7 +659,7 @@ setting1 = hellowworld
 setting1 = hellowworld
 '
     it 'adds a new section with pre/suffix if no sections exists' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'setting1', value: 'hellowworld', path: emptyfile, section_prefix: '-', section_suffix: '-'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'setting1', :value => 'hellowworld', :path => emptyfile, :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -671,7 +671,7 @@ setting1 = hellowworld
 setting1 = hellowworld
 '
     it 'adds a new section with colon if no sections exists' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'setting1', value: 'hellowworld', path: emptyfile))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section:subsection', :setting => 'setting1', :value => 'hellowworld', :path => emptyfile))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -683,7 +683,7 @@ setting1 = hellowworld
 setting1 = hellowworld
 '
     it 'adds a new section with pre/suffix with colon if no sections exists' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:subsection', setting: 'setting1', value: 'hellowworld', path: emptyfile, section_prefix: '-', section_suffix: '-'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section:subsection', :setting => 'setting1', :value => 'hellowworld', :path => emptyfile, :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -691,7 +691,7 @@ setting1 = hellowworld
     end
 
     it 'is able to handle variables of any type' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'master', value: true))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'master', value: true))
       provider = described_class.new(resource)
       expect(provider.value).to eq('true')
     end
@@ -717,7 +717,7 @@ foo = http://192.168.1.1:8080
  ; yet another comment
     EOS
     it "adds a missing setting if it doesn't exist" do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'bar', value: 'yippee'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => '', :setting => 'bar', :value => 'yippee'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -732,7 +732,7 @@ foo = http://192.168.1.1:8080
  ; yet another comment
     EOS
     it 'modifies an existing setting with a different value' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'foo', value: 'yippee'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => '', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
       expect(provider.value).to eq('blah')
       provider.value = 'yippee'
@@ -740,7 +740,7 @@ foo = http://192.168.1.1:8080
     end
 
     it 'recognizes an existing setting with the specified value' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'foo', value: 'blah'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => '', :setting => 'foo', :value => 'blah'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
     end
@@ -761,7 +761,7 @@ foo = yippee
 foo = http://192.168.1.1:8080
     EOS
     it 'is able to add a global setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: '', setting: 'foo', value: 'yippee'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => '', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -773,7 +773,7 @@ foo = http://192.168.1.1:8080
 foo = yippee
     EOS
     it 'modifies an existing setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'foo', :value => 'yippee'))
       provider = described_class.new(resource)
       expect(provider.value).to eq('http://192.168.1.1:8080')
       provider.value = 'yippee'
@@ -786,7 +786,7 @@ foo = http://192.168.1.1:8080
 bar = baz
     EOS
     it 'adds a new setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'baz'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'bar', :value => 'baz'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -807,7 +807,7 @@ foo=bar
 foo=yippee
     EOS
     it 'modifies an existing setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: '='))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'foo', :value => 'yippee', :key_val_separator => '='))
       provider = described_class.new(resource)
       expect(provider.value).to eq('bar')
       provider.value = 'yippee'
@@ -819,16 +819,16 @@ foo=yippee
     let(:orig_content) do
       <<-EOS
 [section2]
-foo: bar
+:foo => bar
       EOS
     end
 
     expected_content_one = <<-EOS
 [section2]
-foo: yippee
+:foo => yippee
     EOS
     it 'modifies an existing setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: ': '))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'foo', :value => 'yippee', :key_val_separator => ': '))
       provider = described_class.new(resource)
       expect(provider.value).to eq('bar')
       provider.value = 'yippee'
@@ -837,11 +837,11 @@ foo: yippee
 
     expected_content_two = <<-EOS
 [section2]
-foo: bar
-bar: baz
+:foo => bar
+:bar => baz
     EOS
     it 'adds a new setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'baz', key_val_separator: ': '))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'bar', :value => 'baz', :key_val_separator => ': '))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -862,7 +862,7 @@ foo bar
 foo yippee
     EOS
     it 'modifies an existing setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'yippee', key_val_separator: ' '))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'foo', :value => 'yippee', :key_val_separator => ' '))
       provider = described_class.new(resource)
       expect(provider.value).to eq('bar')
       provider.value = 'yippee'
@@ -875,7 +875,7 @@ foo bar
 bar baz
     EOS
     it 'adds a new setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'baz', key_val_separator: ' '))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'bar', :value => 'baz', :key_val_separator => ' '))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -937,7 +937,7 @@ subby=bar
    shoes = purple
     EOS
     it 'removes a setting that exists' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', ensure: 'absent'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'foo', :ensure => 'absent'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.destroy
@@ -968,7 +968,7 @@ subby=bar
 
     EOS
     it 'removes a setting with pre/suffix that exists' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'shoes', ensure: 'absent', section_prefix: '-', section_suffix: '-'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'nonstandard', :setting => 'shoes', :ensure => 'absent', :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.destroy
@@ -1001,7 +1001,7 @@ subby=bar
    shoes = purple
     EOS
     it 'does nothing for a setting that does not exist' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'foo', ensure: 'absent'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section:sub', :setting => 'foo', :ensure => 'absent'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.destroy
@@ -1034,7 +1034,7 @@ subby=bar
    shoes = purple
     EOS
     it 'does nothing for a setting with pre/suffix that does not exist' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'nonstandard', setting: 'foo', ensure: 'absent', section_prefix: '-', section_suffix: '-'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'nonstandard', :setting => 'foo', :ensure => 'absent', :section_prefix => '-', :section_suffix => '-'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.destroy
@@ -1066,7 +1066,7 @@ subby=bar
    shoes = purple
     EOS
     it 'does not remove a section when the last uncommented setting is removed if there are comments' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section3', setting: 'uncom', ensure: 'absent'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section3', :setting => 'uncom', :ensure => 'absent'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.destroy
@@ -1097,7 +1097,7 @@ subby=bar
    shoes = purple
     EOS
     it 'removes the section when removing the last line in the section' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section4', setting: 'uncom', ensure: 'absent'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section4', :setting => 'uncom', :ensure => 'absent'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.destroy
@@ -1149,7 +1149,7 @@ subby=bar
  ; yet another comment
     EOS
     it 'adds a missing setting at the correct indentation when the header is aligned' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'yahoo', value: 'yippee'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -1176,7 +1176,7 @@ subby=bar
  ; yet another comment
     EOS
     it 'updates an existing setting at the correct indentation when the header is aligned' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'bar', value: 'barvalue2'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'bar', :value => 'barvalue2'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.create
@@ -1204,7 +1204,7 @@ subby=bar
  ; yet another comment
     EOS
     it 'adds a missing setting at the correct indentation when the header is not aligned' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'yahoo', value: 'yippee'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -1231,7 +1231,7 @@ subby=bar
  ; yet another comment
     EOS
     it 'updates an existing setting at the correct indentation when the header is not aligned' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'baz', value: 'bazvalue2'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'baz', :value => 'bazvalue2'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.create
@@ -1259,7 +1259,7 @@ subby=bar
  yahoo = yippee
     EOS
     it 'adds a missing setting at the min indentation when the section is not aligned' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'yahoo', value: 'yippee'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section:sub', :setting => 'yahoo', :value => 'yippee'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -1286,7 +1286,7 @@ subby=bar
  ; yet another comment
     EOS
     it 'updates an existing setting at the previous indentation when the section is not aligned' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'fleezy', value: 'flam2'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section:sub', :setting => 'fleezy', :value => 'flam2'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.create
@@ -1313,7 +1313,7 @@ subby=bar
  ; yet another comment
     EOS
     it 'updates an existing setting at the previous indentation regardless of indent_char and indent_width settings' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section:sub', setting: 'fleezy', value: 'flam2', indent_char: 'ignore this', indent_width: 10))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section:sub', :setting => 'fleezy', :value => 'flam2', :indent_char => 'ignore this', :indent_width => 10))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.create
@@ -1351,7 +1351,7 @@ blah = blah
 #baz=
     EOS
     it 'adds a new setting below a commented version of that setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'foo', value: 'foo3'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'foo', :value => 'foo3'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -1371,7 +1371,7 @@ blah = blah
 #baz=
     EOS
     it 'updates an existing setting in place, even if there is a commented version of that setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', value: 'foo3'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'foo', :value => 'foo3'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       provider.create
@@ -1392,7 +1392,7 @@ blah = blah
 #baz=
     EOS
     it 'adds a new setting below a commented version of that setting, respecting semicolons as comments' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'bar', value: 'bar3'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'bar', :value => 'bar3'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -1413,7 +1413,7 @@ blah = blah
 baz = bazvalue
     EOS
     it 'adds a new setting below an empty commented version of that setting' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section2', setting: 'baz', value: 'bazvalue'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section2', :setting => 'baz', :value => 'bazvalue'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create
@@ -1436,7 +1436,7 @@ foo = foovalue2
 # bar=bar2
       EOS
       it 'is able to add a new setting when a section contains only comments' do
-        resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'foo', value: 'foovalue2'))
+        resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'foo', :value => 'foovalue2'))
         provider = described_class.new(resource)
         expect(provider.exists?).to be false
         provider.create
@@ -1450,7 +1450,7 @@ foo = foovalue2
 bar = barvalue2
       EOS
       it 'is able to add a new setting when it matches a commented out line other than the first one' do
-        resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section1', setting: 'bar', value: 'barvalue2'))
+        resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'bar', :value => 'barvalue2'))
         provider = described_class.new(resource)
         expect(provider.exists?).to be false
         provider.create
@@ -1500,7 +1500,7 @@ subby=bar
  ; yet another comment
       EOS
       it 'adds a missing setting to the correct section' do
-        resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'section - two', setting: 'yahoo', value: 'yippee'))
+        resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section - two', :setting => 'yahoo', :value => 'yippee'))
         provider = described_class.new(resource)
         expect(provider.exists?).to be false
         provider.create
@@ -1537,7 +1537,7 @@ foo = bar
         merge = refs/heads/production
     EOS
     it 'adds a missing setting to the correct section' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(section: 'alias', setting: 'foo', value: 'bar'))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'alias', :setting => 'foo', :value => 'bar'))
       provider = described_class.new(resource)
       expect(provider.exists?).to be false
       provider.create

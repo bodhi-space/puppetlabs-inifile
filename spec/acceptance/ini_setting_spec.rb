@@ -4,21 +4,21 @@ tmpdir = default.tmpdir('tmp')
 
 describe 'ini_setting resource' do
   after :all do
-    shell("rm #{tmpdir}/*.ini", acceptable_exit_codes: [0, 1, 2])
+    shell("rm #{tmpdir}/*.ini", :acceptable_exit_codes => [0, 1, 2])
   end
 
   shared_examples 'has_content' do |path, pp, content|
     before :all do
-      shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
+      shell("rm #{path}", :acceptable_exit_codes => [0, 1, 2])
     end
     after :all do
-      shell("cat #{path}", acceptable_exit_codes: [0, 1, 2])
-      shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
+      shell("cat #{path}", :acceptable_exit_codes => [0, 1, 2])
+      shell("rm #{path}", :acceptable_exit_codes => [0, 1, 2])
     end
 
     it 'applies the manifest twice' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
     end
 
     describe file(path) do
@@ -34,15 +34,15 @@ describe 'ini_setting resource' do
 
   shared_examples 'has_error' do |path, pp, error|
     before :all do
-      shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
+      shell("rm #{path}", :acceptable_exit_codes => [0, 1, 2])
     end
     after :all do
-      shell("cat #{path}", acceptable_exit_codes: [0, 1, 2])
-      shell("rm #{path}", acceptable_exit_codes: [0, 1, 2])
+      shell("cat #{path}", :acceptable_exit_codes => [0, 1, 2])
+      shell("rm #{path}", :acceptable_exit_codes => [0, 1, 2])
     end
 
     it 'applies the manifest and gets a failure message' do
-      expect(apply_manifest(pp, expect_failures: true).stderr).to match(error)
+      expect(apply_manifest(pp, :expect_failures => true).stderr).to match(error)
     end
 
     describe file(path) do
@@ -69,8 +69,8 @@ describe 'ini_setting resource' do
     EOS
 
     it 'applies the manifest twice' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
     end
 
     it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, %r{four = five\n\n\[one\]\ntwo = three}
@@ -103,8 +103,8 @@ describe 'ini_setting resource' do
     EOS
 
     it 'applies the manifest twice' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
     end
 
     it_behaves_like 'has_content', "#{tmpdir}/ini_setting.ini", pp, %r{four = five\n\n\[one\]\ntwo = three}
@@ -130,8 +130,8 @@ describe 'ini_setting resource' do
     EOS
 
     it 'applies the manifest twice' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
     end
 
     describe file("#{tmpdir}/ini_setting.ini") do
@@ -156,8 +156,8 @@ describe 'ini_setting resource' do
       end
     end
     after :all do
-      shell("cat #{tmpdir}/ini_setting.ini", acceptable_exit_codes: [0, 1, 2])
-      shell("rm #{tmpdir}/ini_setting.ini", acceptable_exit_codes: [0, 1, 2])
+      shell("cat #{tmpdir}/ini_setting.ini", :acceptable_exit_codes => [0, 1, 2])
+      shell("rm #{tmpdir}/ini_setting.ini", :acceptable_exit_codes => [0, 1, 2])
     end
 
     pp = <<-EOS
@@ -171,8 +171,8 @@ describe 'ini_setting resource' do
     EOS
 
     it 'applies the manifest twice' do
-      apply_manifest(pp, catch_failures: true)
-      apply_manifest(pp, catch_changes: true)
+      apply_manifest(pp, :catch_failures => true)
+      apply_manifest(pp, :catch_changes => true)
     end
 
     describe file("#{tmpdir}/ini_setting.ini") do
@@ -312,7 +312,7 @@ describe 'ini_setting resource' do
         config = { 'main' => { 'show_diff' => true } }
         configure_puppet_on(default, config)
 
-        res = apply_manifest(pp, expect_changes: true)
+        res = apply_manifest(pp, :expect_changes => true)
         it 'applies manifest and expects changed value to be logged in proper form' do
           expect(res.stdout).to match(i[:matcher])
         end

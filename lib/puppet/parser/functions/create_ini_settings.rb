@@ -2,7 +2,7 @@
 # create_ini_settings.rb
 #
 module Puppet::Parser::Functions
-  newfunction(:create_ini_settings, type: :statement, doc: <<-EOS
+  newfunction(:create_ini_settings, :type => :statement, :doc => <<-EOS
     Uses create_resources to create a set of ini_setting resources from a hash:
 
         $settings = {  section1 => {
