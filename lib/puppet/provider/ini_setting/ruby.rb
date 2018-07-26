@@ -20,9 +20,9 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
       ini_file.get_settings(section_name).each do |setting, value|
         resources.push(
           new(
-            name: namevar(section_name, setting),
-            value: value,
-            ensure: :present,
+            :name => namevar(section_name, setting),
+            :value => value,
+            :ensure => :present,
           ),
         )
       end

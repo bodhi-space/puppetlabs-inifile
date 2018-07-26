@@ -376,7 +376,7 @@ subby=bar
   shoes = purple
     EOS
     it 'modifies an existing setting with a different boolean value' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'master', value: false))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'master', :value => false))
       provider = described_class.new(resource)
       expect(provider.exists?).to be true
       transaction = instance_double('transaction', :persistence => true)
@@ -691,7 +691,7 @@ setting1 = hellowworld
     end
 
     it 'is able to handle variables of any type' do
-      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'master', value: true))
+      resource = Puppet::Type::Ini_setting.new(common_params.merge(:section => 'section1', :setting => 'master', :value => true))
       provider = described_class.new(resource)
       expect(provider.value).to eq('true')
     end
