@@ -51,8 +51,8 @@ module Puppet::Util
 
     def get_settings(section_name)
       section = @sections_hash[section_name]
-      section.setting_names.each_with_object({}) do |setting, result|
-        result[setting] = section.get_value(setting)
+      section.setting_names.inject({}) do |result, setting|
+        result.update(setting => section.get_value(setting))
       end
     end
 

@@ -60,7 +60,7 @@ module Puppet::Parser::Functions
             'create_ini_settings(): Requires all arguments to be a Hash')
     end
 
-    resources = settings.keys.each_with_object({}) do |section, res|
+    resources = settings.keys.inject({}) do |res, section|
       unless settings[section].is_a?(Hash)
         raise(Puppet::ParseError,
               "create_ini_settings(): Section #{section} must contain a Hash")
@@ -70,7 +70,7 @@ module Puppet::Parser::Functions
       raise Puppet::ParseError, 'create_ini_settings(): must pass the path parameter to the Ini_setting resource!' unless path
 
       settings[section].each do |setting, value|
-        res["#{path} [#{section}] #{setting}"] = {
+        res.update("#{path} [#{section}] #{setting}" => {
           'ensure'  => 'present',
           'section' => section,
           'setting' => setting,
@@ -79,7 +79,9 @@ module Puppet::Parser::Functions
                 else
                   { 'value' => value }
                 end)
+        )
       end
+      res
     end
 
     Puppet::Parser::Functions.function('create_resources')
