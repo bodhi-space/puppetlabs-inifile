@@ -2,8 +2,8 @@ require File.expand_path('../external_iterator', __FILE__)
 require File.expand_path('../ini_file/section', __FILE__)
 
 # from https://github.com/marcandre/backports/blob/master/lib/backports/1.9.1/enumerable/each_with_object.rb
-unless Enumerable.method_defined? :each_with_object
-  module Enumerable
+unless Array.method_defined? :each_with_object
+  module Array
     def each_with_object(memo)
       return to_enum(:each_with_object, memo) unless block_given?
       each {|obj| yield obj, memo}
