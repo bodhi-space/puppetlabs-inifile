@@ -22,8 +22,8 @@ Puppet::Type.type(:ini_setting).provide(:ruby) do
           new(
             :name => namevar(section_name, setting),
             :value => value,
-            :ensure => :present,
-          ),
+            :ensure => :present
+          )
         )
       end
     end

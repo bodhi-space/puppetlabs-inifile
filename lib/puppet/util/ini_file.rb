@@ -74,9 +74,9 @@ module Puppet::Util
       end
 
       complete_setting = {
-        setting: setting,
-        separator: separator,
-        value: value,
+        :setting => setting,
+        :separator => separator,
+        :value => value,
       }
       unless @sections_hash.key?(section_name)
         add_section(Section.new(section_name, nil, nil, nil, nil))
@@ -286,7 +286,7 @@ module Puppet::Util
       (section.start_line..section.end_line).each do |line_num|
         next unless (match = @commented_setting_regex.match(lines[line_num]))
         if match[3] == setting
-          return { match: match, line_num: line_num }
+          return { :match => match, :line_num => line_num }
         end
       end
       nil

@@ -20,11 +20,11 @@ describe provider_class do
   context 'when ensuring that a subsetting is present' do
     let(:common_params) do
       {
-        title: 'ini_setting_ensure_present_test',
-        path: tmpfile,
-        section: '',
-        key_val_separator: '=',
-        setting: 'JAVA_ARGS',
+        :title => 'ini_setting_ensure_present_test',
+        :path => tmpfile,
+        :section => '',
+        :key_val_separator => '=',
+        :setting => 'JAVA_ARGS',
       }
     end
 
@@ -148,10 +148,10 @@ describe provider_class do
   context 'when working with subsettings in files with unquoted settings values' do
     let(:common_params) do
       {
-        title: 'ini_setting_ensure_present_test',
-        path: tmpfile,
-        section: 'master',
-        setting: 'reports',
+        :title => 'ini_setting_ensure_present_test',
+        :path => tmpfile,
+        :section => 'master',
+        :setting => 'reports',
       }
     end
 
@@ -207,11 +207,11 @@ describe provider_class do
   context 'when working with subsettings in files with use_exact_match' do
     let(:common_params) do
       {
-        title: 'ini_setting_ensure_present_test',
-        path: tmpfile,
-        section: 'master',
-        setting: 'reports',
-        use_exact_match: true,
+        :title => 'ini_setting_ensure_present_test',
+        :path => tmpfile,
+        :section => 'master',
+        :setting => 'reports',
+        :use_exact_match => true,
       }
     end
 
@@ -252,12 +252,12 @@ describe provider_class do
   context 'when working with subsettings in files with subsetting_key_val_separator' do
     let(:common_params) do
       {
-        title: 'ini_setting_ensure_present_test',
-        path: tmpfile,
-        section: 'master',
-        setting: 'reports',
-        subsetting_separator: ',',
-        subsetting_key_val_separator: ':',
+        :title => 'ini_setting_ensure_present_test',
+        :path => tmpfile,
+        :section => 'master',
+        :setting => 'reports',
+        :subsetting_separator => ',',
+        :subsetting_key_val_separator => ':',
       }
     end
 

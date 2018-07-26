@@ -245,10 +245,10 @@ describe 'ini_subsetting resource' do
   end
 
   describe 'show_diff parameter and logging:' do
-    [{ value: 'initial_value', matcher: 'created', show_diff: true },
-     { value: 'public_value', matcher: %r{initial_value.*public_value}, show_diff: true },
-     { value: 'secret_value', matcher: %r{redacted sensitive information.*redacted sensitive information}, show_diff: false },
-     { value: 'md5_value', matcher: %r{\{md5\}881671aa2bbc680bc530c4353125052b.*\{md5\}ed0903a7fa5de7886ca1a7a9ad06cf51}, show_diff: :md5 }].each do |i|
+    [{ :value => 'initial_value', :matcher => 'created', :show_diff => true },
+     { :value => 'public_value', :matcher => %r{initial_value.*public_value}, :show_diff => true },
+     { :value => 'secret_value', :matcher => %r{redacted sensitive information.*redacted sensitive information}, :show_diff => false },
+     { :value => 'md5_value', :matcher => %r{\{md5\}881671aa2bbc680bc530c4353125052b.*\{md5\}ed0903a7fa5de7886ca1a7a9ad06cf51}, :show_diff => :md5 }].each do |i|
       context "show_diff => #{i[:show_diff]}" do
         pp = <<-EOS
           ini_subsetting { 'test_show_diff':
@@ -279,27 +279,27 @@ describe 'ini_subsetting resource' do
   describe 'insert types:' do
     [
       {
-        insert_type: :start,
-        content: %r{d a b c},
+        :insert_type => :start,
+        :content => %r{d a b c},
       },
       {
-        insert_type: :end,
-        content: %r{a b c d},
+        :insert_type => :end,
+        :content => %r{a b c d},
       },
       {
-        insert_type: :before,
-        insert_value: 'c',
-        content: %r{a b d c},
+        :insert_type => :before,
+        :insert_value => 'c',
+        :content => %r{a b d c},
       },
       {
-        insert_type: :after,
-        insert_value: 'a',
-        content: %r{a d b c},
+        :insert_type => :after,
+        :insert_value => 'a',
+        :content => %r{a d b c},
       },
       {
-        insert_type: :index,
-        insert_value: 2,
-        content: %r{a b d c},
+        :insert_type => :index,
+        :insert_value => 2,
+        :content => %r{a b d c},
       },
     ].each do |params|
       context "with '#{params[:insert_type]}' makes '#{params[:content]}'" do

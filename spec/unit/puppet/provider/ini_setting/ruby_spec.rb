@@ -10,9 +10,9 @@ describe provider_class do
 
   let(:common_params) do
     {
-      title: 'ini_setting_ensure_present_test',
-      path: tmpfile,
-      section: 'section2',
+      :title => 'ini_setting_ensure_present_test',
+      :path => tmpfile,
+      :section => 'section2',
     }
   end
 
@@ -93,13 +93,13 @@ describe provider_class do
         child_three.stubs(:file_path).returns(tmpfile)
         expect(child_three.instances.size).to eq(7)
         expected_array = [
-          { name: 'section1/foo', :value => 'foovalue' },
-          { name: 'section1/bar', :value => 'barvalue' },
-          { name: 'section1/master', :value => 'true' },
-          { name: 'section2/foo', :value => 'foovalue2' },
-          { name: 'section2/baz', :value => 'bazvalue' },
-          { name: 'section2/url', :value => 'http://192.168.1.1:8080' },
-          { name: 'section:sub/subby', :value => 'bar' },
+          { :name => 'section1/foo', :value => 'foovalue' },
+          { :name => 'section1/bar', :value => 'barvalue' },
+          { :name => 'section1/master', :value => 'true' },
+          { :name => 'section2/foo', :value => 'foovalue2' },
+          { :name => 'section2/baz', :value => 'bazvalue' },
+          { :name => 'section2/url', :value => 'http://192.168.1.1:8080' },
+          { :name => 'section:sub/subby', :value => 'bar' },
         ]
         real_array = []
         ensure_array = []
